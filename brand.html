@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brand Products - Lunara Skincare</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .product-card { transition: transform 0.2s ease-in-out; }
+    .product-card:hover { transform: scale(1.05); }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-4">
+    <a class="navbar-brand fw-bold text-dark" href="Homepage.html">Lunara Skincare</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link text-dark" href="Homepage.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="Aboutus.html">About Us</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="products.html">Products</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="Cart.html">Cart</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="contact.html">Contact</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="Login.html">Login</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Brand Section -->
+  <main class="container my-5">
+    <h2 id="brand-title" class="text-center mb-4"></h2>
+    <div id="product-list" class="row g-4"></div>
+    <div class="text-center mt-4">
+      <a href="Homepage.html" class="btn btn-light">Back to Home</a>
+    </div>
+  </main>
+
+  <!-- Product Script -->
+  <script>
+    // All Products Database 
+    const products = [
+      // === Skintific ===
+      { id: 1, brand: "skintific", name: "Skintific Barrier Cream", price: "RM 79.00", img: "image/Moisturizer.jpg", desc: "Hydrating cream for sensitive skin." },
+      { id: 2, brand: "skintific", name: "Skintific Cleanser", price: "RM 39.00", img: "image/GelCleanser.jpg", desc: "Gentle daily face cleanser." },
+      { id: 3, brand: "skintific", name: "377 Serum", price: "RM 56.00", img: "image/377Serum.jpg", desc: "377 Dark Spot Serum suitable for all skin types." },
+      { id: 4, brand: "skintific", name: "Skintific Gel Cleanser", price: "RM 30.00", img: "image/GelCleanser.jpg", desc: "Smooth Skin pencuci muka Panoxyl Face Wash Amino Acid Oil Control" },
+      { id: 5, brand: "skintific", name: "Sunscreen", price: "RM 69.00", img: "image/Sunscreen.jpg", desc: "SPF50+ PA++++ UV Protection Oil Control Fast-Absorbing Light Physical Tinted Sunscreen" },
+      { id: 6, brand: "skintific", name: "Eye Cream", price: "RM 59.00", img: "image/EyeCream.jpg", desc: "Removes Fine Lines, Dark Circles, Reduces wrinkles, Anti-aging" },
+
+      // === La Roche-Posay ===
+      { id: 7, brand: "laroche", name: "La Roche Sunscreen", price: "RM 120.00", img: "image/Anthelios.jpg", desc: "SPF 50+ for sensitive skin." },
+      { id: 8, brand: "laroche", name: "Cicaplast Baume B5+", price: "RM 55.00", img: "image/Cicaplast.jpg", desc: "Soothing Multi-Purpose Balm - Dry-Skin Irritations 100ml" },
+      { id: 9, brand: "laroche", name: "Mela B3 Serum", price: "RM 66.00", img: "image/MelaB3.jpg", desc: "Intensive anti-dark spots concentrate serum, anti-recurrence 30ml" },
+      { id: 10, brand: "laroche", name: "Effaclar Serum", price: "RM 66.00", img: "image/Effaclar.jpg", desc: "Anti-Acne Serum with Salicylic, Glycolic Acid, Niacinamide for Oily Acne-Prone Skin 30ml" },
+
+      // === CosRx ===
+      { id: 11, brand: "cosrx", name: "Original Clear Pad", price: "RM 55.20", img: "image/ClearPad.jpg", desc: "COSRX One Step Original Clear Pad (70 Pads)" },
+      { id: 12, brand: "cosrx", name: "CosRx Snail Essence", price: "RM 57.50", img: "image/Propolis.jpg", desc: "Repairing and hydrating essence." },
+      { id: 13, brand: "cosrx", name: "Low pH Gel Cleanser", price: "RM 40.50", img: "image/COSRXcleanser.jpg", desc: "COSRX Low pH Good Morning Gel Cleanser 150ml" },
+      { id: 14, brand: "cosrx", name: "Acne Treatment Toner", price: "RM 46.30", img: "image/AcneToner.jpg", desc: "COSRX AHA/BHA Clarifying Treatment Toner 150ml" },
+      { id: 15, brand: "cosrx", name: "Acne Pimple Master Patch", price: "RM 24.00", img: "image/MasterPatch.jpg", desc: "COSRX Acne Pimple Master Patch (24 Patches)" },
+
+      // === Eucerin ===
+      { id: 16, brand: "eucerin", name: "Dry Lip Moisturizer", price: "RM 20.00", img: "image/LipMoisturizer.jpg", desc: "Eucerin Active Dry Lip Moisturizer SPF20 (4.8g)" },
+      { id: 17, brand: "eucerin", name: "Spotless Brightening Cleansing Foam", price: "RM 30.00", img: "image/BrighteningFoam.jpg", desc: "Eucerin Spotless Brightening Cleansing Foam 50g/150g | Brighten & Cleanse | Anti Dark Spots | Hyperpigmentation Skin" }
+    ];
+
+    // Get brand from URL
+    const params = new URLSearchParams(window.location.search);
+    const brand = params.get("brand");
+
+    // Title
+    const brandTitle = document.getElementById("brand-title");
+    brandTitle.textContent = brand ? brand.toUpperCase() + " Products" : "All Products";
+
+    // Render products
+    const productList = document.getElementById("product-list");
+    const filteredProducts = brand && brand !== "all" ? products.filter(p => p.brand === brand) : products;
+
+    if (filteredProducts.length > 0) {
+      filteredProducts.forEach(product => {
+        productList.innerHTML += `
+          <div class="col-md-3">
+            <div class="card product-card shadow-sm h-100">
+              <img src="${product.img}" class="card-img-top" alt="${product.name}">
+              <div class="card-body">
+                <h5 class="card-title">${product.name}</h5>
+                <p class="card-text">${product.desc}</p>
+                <p class="fw-bold">${product.price}</p>
+                <a href="detail.html?id=${product.id}" class="btn btn-dark w-100">View Product</a>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    } else {
+      productList.innerHTML = `<p class="text-center text-muted">No products found for this brand.</p>`;
+    }
+  </script>
+
+  <!-- Footer -->
+  <footer class="bg-white text-dark py-4 mt-5 border-top border-secondary">
+    <div class="container text-center">
+      <p class="fw-bold mb-1">&copy; 2025 Lunara Skincare</p>
+      <p class="text-muted small mb-0">
+        Facebook: LunaraSkincare | Instagram: LunaraSkincare | TikTok: LunaraSkincare
+      </p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

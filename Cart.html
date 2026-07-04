@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart - Lunara Skincare</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f9fa;
+    }
+    .navbar {
+      padding: 0.5rem 1rem; 
+    }
+    .navbar-brand {
+      font-weight: bold;
+      margin-left: 0; 
+    }
+    .cart-item {
+      background-color: white;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+    .cart-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    .empty-cart {
+      text-align: center;
+      padding: 50px 0;
+    }
+    .quantity-control {
+      display: flex;
+      align-items: center;
+    }
+    .quantity-btn {
+      width: 35px; 
+      height: 35px;
+      border: 1px solid #ddd;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+    .quantity-btn:hover {
+      background-color: #e9ecef;
+    }
+    .quantity-input {
+      width: 50px;
+      text-align: center;
+      margin: 0 10px;
+      padding: 5px;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+    }
+    .product-image {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 1px solid #eee;
+    }
+    footer {
+      background-color: #ffffff;
+      color: #333;
+      padding: 2rem 1rem;
+      border-top: 1px solid #ccc;
+      text-align: center;
+      margin-top: 30px;
+    }
+    .free-shipping-banner {
+      background-color: #d4edda;
+      color: #155724;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    .shipping-progress {
+      height: 8px;
+      background-color: #e9ecef;
+      border-radius: 4px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+    .shipping-progress-bar {
+      height: 100%;
+      background-color: #28a745;
+      transition: width 0.3s ease;
+    }
+    .guest-checkout-option {
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 20px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-4">
+    <a class="navbar-brand fw-bold text-dark" href="Homepage.html">Lunara Skincare</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link text-dark" href="Homepage.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="Aboutus.html">About Us</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="products.html">Products</a></li>
+        <li class="nav-item"><a class="nav-link text-dark active fw-bold" href="Cart.html">Cart</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="contact.html">Contact</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="Login.html">Login</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <div class="container my-4">
+    <h1 class="text-center fw-bold">Your Shopping Cart</h1>
+    <p class="text-center text-muted">Review your items before checkout</p>
+  </div>
+
+  <!-- Cart Content -->
+  <div class="container my-4">
+    <div id="free-shipping-message"></div>
+    <div id="cart-items-container">
+      <!-- Cart items will be loaded by JavaScript -->
+    </div>
+
+    <!-- Cart Summary -->
+    <div class="row mt-4">
+      <div class="col-md-8"></div>
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Order Summary</h5>
+            <div class="d-flex justify-content-between mb-2">
+              <span>Subtotal:</span>
+              <span id="subtotal">RM 0.00</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span>Shipping:</span>
+              <span id="shipping">RM 10.00</span>
+            </div>
+            <div id="free-shipping-notice" class="free-shipping-banner" style="display: none;">
+              Congratulation! You've earned a free shipping with minimum spend of RM80!
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between fw-bold">
+              <span>Total:</span>
+              <span id="total">RM 10.00</span>
+            </div>
+            
+            <!-- Checkout Button -->
+            <button class="btn btn-dark w-100 mt-3" onclick="proceedToCheckout()">
+              <i class="fas fa-lock me-2"></i>Proceed to Checkout
+            </button>
+
+            <a href="products.html" class="btn btn-outline-secondary w-100 mt-2">
+              <i class="fas fa-arrow-left me-2"></i>Continue Shopping
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-white text-dark py-4 mt-5 border-top border-secondary">
+    <div class="container text-center">
+      <p class="fw-bold mb-1">&copy; 2025 Lunara Skincare</p>
+      <p class="text-muted small mb-0">
+        Facebook: LunaraSkincare | Instagram: LunaraSkincare | TikTok: LunaraSkincare
+      </p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    // Cookie functions
+    function getCookie(cname) {
+      var name = cname + "=";
+      var decodedCookie = decodeURIComponent(document.cookie);
+      var ca = decodedCookie.split(';');
+      for(var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    }
+
+    function setCookie(cname, cvalue, exdays) {
+      var d = new Date();
+      d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+      var expires = "expires=" + d.toUTCString();
+      document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+
+    function deleteCookie(cname) {
+      document.cookie = cname + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    }
+
+    // Check if user is logged in
+    function isLoggedIn() {
+      const loginStatus = getCookie("lunara_logged_in");
+      return loginStatus === "true" || loginStatus === "guest";
+    }
+
+    // Proceed to checkout with proper authentication flow
+    function proceedToCheckout() {
+      const cart = getCart();
+      if (cart.length === 0) {
+        alert('Your cart is empty. Add some products before checkout.');
+        return;
+      }
+      
+      if (isLoggedIn()) {
+        // User is logged in, go directly to checkout
+        window.location.href = "checkout.html";
+      } else {
+        // User is not logged in, set redirect cookie and go to login
+        setCookie("redirect_to_checkout", "true", 1); // Expires in 1 day
+        window.location.href = "login.html";
+      }
+    }
+
+    // Continue as guest (skip login and go directly to checkout)
+    function continueAsGuest() {
+      const cart = getCart();
+      if (cart.length === 0) {
+        alert('Your cart is empty. Add some products before checkout.');
+        return;
+      }
+      
+      // Set guest status cookie (expires in 1 day)
+      setCookie("lunara_logged_in", "guest", 1);
+      
+      // Go directly to checkout
+      window.location.href = "checkout.html";
+    }
+
+    // Cart management functions
+    function getCart() {
+      const cartCookie = getCookie("lunara_cart");
+      try {
+        return cartCookie ? JSON.parse(cartCookie) : [];
+      } catch (e) {
+        console.error("Error parsing cart cookie:", e);
+        return [];
+      }
+    }
+
+    function saveCart(cart) {
+      setCookie("lunara_cart", JSON.stringify(cart), 7); // Expires in 7 days
+    }
+
+    function updateCartDisplay() {
+      const cartContainer = document.getElementById('cart-items-container');
+      const freeShippingMessage = document.getElementById('free-shipping-message');
+      const cart = getCart();
+      
+      if (cart.length === 0) {
+        cartContainer.innerHTML = `
+          <div class="empty-cart">
+            <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+            <h3>Your cart is empty</h3>
+            <p class="text-muted">Add some products to your cart to see them here</p>
+            <a href="products.html" class="btn btn-dark">
+              <i class="fas fa-tshirt me-2"></i>Browse Products
+            </a>
+          </div>
+        `;
+        document.getElementById('subtotal').textContent = 'RM 0.00';
+        document.getElementById('shipping').textContent = 'RM 10.00';
+        document.getElementById('total').textContent = 'RM 10.00';
+        freeShippingMessage.innerHTML = '';
+        document.getElementById('free-shipping-notice').style.display = 'none';
+        return;
+      }
+      
+      let cartHTML = '';
+      let subtotal = 0;
+      
+      cart.forEach((item, index) => {
+        const itemTotal = parseFloat(item.price) * item.quantity;
+        subtotal += itemTotal;
+        
+        cartHTML += `
+          <div class="cart-item">
+            <div class="row align-items-center">
+              <div class="col-md-2">
+                <img src="${item.image}" alt="${item.name}" class="product-image">
+              </div>
+              <div class="col-md-4">
+                <h5>${item.name}</h5>
+                <p class="text-muted mb-0">${item.brand}</p>
+              </div>
+              <div class="col-md-2">
+                <p class="fw-bold">RM ${parseFloat(item.price).toFixed(2)}</p>
+              </div>
+              <div class="col-md-2">
+                <div class="quantity-control">
+                  <button class="quantity-btn" onclick="updateQuantity(${index}, ${item.quantity - 1})">-</button>
+                  <input type="number" class="form-control quantity-input" value="${item.quantity}" min="1" 
+                    onchange="updateQuantity(${index}, parseInt(this.value))">
+                  <button class="quantity-btn" onclick="updateQuantity(${index}, ${item.quantity + 1})">+</button>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <p class="fw-bold">RM ${itemTotal.toFixed(2)}</p>
+                <button class="btn btn-sm btn-outline-danger" onclick="removeFromCart(${index})">
+                  <i class="fas fa-trash me-1"></i>Remove
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      
+      cartContainer.innerHTML = cartHTML;
+      
+      // Calculate shipping (free for orders above RM 80)
+      const shippingCost = subtotal >= 80 ? 0 : 10;
+      const total = subtotal + shippingCost;
+      
+      document.getElementById('subtotal').textContent = `RM ${subtotal.toFixed(2)}`;
+      document.getElementById('shipping').textContent = shippingCost === 0 ? 'FREE' : `RM ${shippingCost.toFixed(2)}`;
+      document.getElementById('total').textContent = `RM ${total.toFixed(2)}`;
+      
+      // Show free shipping message
+      const threshold = 80;
+
+      if (subtotal >= threshold) {
+        // Free shipping unlocked
+        document.getElementById('free-shipping-notice').style.display = 'block';
+        freeShippingMessage.innerHTML = '';
+      } else if (subtotal > 0) {
+        // Progressing toward free shipping
+        document.getElementById('free-shipping-notice').style.display = 'none';
+        const remaining = threshold - subtotal;
+        const progressPercent = Math.min((subtotal / threshold) * 100, 100);
+
+        freeShippingMessage.innerHTML = `
+          <div class="free-shipping-banner">
+            <p class="mb-1">Add <strong>RM ${remaining.toFixed(2)}</strong> more to get free shipping!</p>
+            <div class="shipping-progress">
+              <div class="shipping-progress-bar" style="width: ${progressPercent}%"></div>
+            </div>
+          </div>
+        `;
+      } else {
+        // Empty cart or zero subtotal
+        document.getElementById('free-shipping-notice').style.display = 'none';
+        freeShippingMessage.innerHTML = '';
+      }
+    }
+
+    function updateQuantity(index, newQuantity) {
+      if (newQuantity < 1) newQuantity = 1;
+      
+      const cart = getCart();
+      cart[index].quantity = newQuantity;
+      saveCart(cart);
+      updateCartDisplay();
+    }
+
+    function removeFromCart(index) {
+      const cart = getCart();
+      const removedItem = cart[index];
+      cart.splice(index, 1);
+      saveCart(cart);
+      updateCartDisplay();
+      
+      // Show removal feedback
+      alert(`Removed ${removedItem.name} from your cart`);
+    }
+
+    // Initialize cart display when page loads
+    document.addEventListener('DOMContentLoaded', updateCartDisplay);
+  </script>
+</body>
+</html>

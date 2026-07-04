@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Lunara Skincare</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .login-container {
+      max-width: 400px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+    .form-switcher {
+      display: flex;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid #dee2e6;
+    }
+    .form-switcher button {
+      flex: 1;
+      padding: 0.75rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      color: #6c757d;
+      border-bottom: 3px solid transparent;
+    }
+    .form-switcher button.active {
+      color: #000;
+      border-bottom: 3px solid #000;
+    }
+    .form-container {
+      display: none;
+    }
+    .form-container.active {
+      display: block;
+    }
+    .benefits-list {
+      background-color: #f8f9fa;
+      padding: 1rem;
+      border-radius: 5px;
+      margin-bottom: 1rem;
+    }
+    .benefits-list ul {
+      margin-bottom: 0;
+      padding-left: 1.2rem;
+    }
+    .benefits-list li {
+      margin-bottom: 0.5rem;
+    }
+    .password-toggle {
+      cursor: pointer;
+      position: absolute;
+      right: 10px;
+      top: 70%;
+      transform: translateY(-50%);
+      color: #6c757d;
+      z-index: 5;
+    }
+    .password-input-container {
+      position: relative;
+    }
+    .form-text {
+      font-size: 0.8rem;
+    }
+    .alert {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-4">
+    <a class="navbar-brand fw-bold text-dark" href="Homepage.html">Lunara Skincare</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link text-dark" href="Homepage.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="Aboutus.html">About Us</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="products.html">Products</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="Cart.html">Cart</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="contact.html">Contact</a></li>
+        <li class="nav-item"><a class="nav-link text-dark active fw-bold" href="Login.html">Login</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Login Container -->
+  <div class="container my-5">
+    <div class="login-container">
+      <h2 class="text-center mb-4">Let's join as a member!</h2>
+      <p class="text-center text-muted mb-4">Login or create an account for a greater experience</p>
+      
+      <!-- Alert Messages -->
+      <div id="errorAlert" class="alert alert-danger" role="alert"></div>
+      <div id="successAlert" class="alert alert-success" role="alert"></div>
+      
+      <div class="form-switcher">
+        <button class="active" onclick="showForm('login')">Login</button>
+        <button onclick="showForm('register')">Register</button>
+      </div>
+      
+      <!-- Login Form -->
+      <div id="login-form" class="form-container active">
+        <div class="benefits-list">
+          <h6>Member Benefits:</h6>
+          <ul>
+            <li>Faster checkout process</li>
+            <li>Order tracking history</li>
+            <li>Exclusive member discounts</li>
+            <li>Early access to new products</li>
+          </ul>
+        </div>
+        
+        <form id="loginForm">
+          <div class="mb-3">
+            <label for="loginEmail" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="loginEmail" required>
+          </div>
+          <div class="mb-3 password-input-container">
+            <label for="loginPassword" class="form-label">Password</label>
+            <input type="password" class="form-control" id="loginPassword" required>
+            <span class="password-toggle" onclick="togglePassword('loginPassword')">
+              <i class="far fa-eye"></i>
+            </span>
+          </div>
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="rememberMe">
+            <label class="form-check-label" for="rememberMe">Remember me</label>
+          </div>
+          <button type="submit" class="btn btn-dark w-100">Login</button>
+          <div class="text-center mt-2">
+            <a href="#" onclick="forgotPassword()">Forgot password?</a>
+          </div>
+        </form>
+      </div>
+      
+      <!-- Registration Form -->
+      <div id="register-form" class="form-container">
+        <div class="benefits-list">
+          <h6>Create an account to enjoy:</h6>
+          <ul>
+            <li>Faster checkout on future orders</li>
+            <li>Order history and tracking</li>
+            <li>Members-only discounts and promotions</li>
+            <li>Personalized product recommendations</li>
+          </ul>
+        </div>
+        
+        <form id="registerForm">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="firstName" class="form-label">First Name</label>
+              <input type="text" class="form-control" id="firstName" required>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="lastName" class="form-label">Last Name</label>
+              <input type="text" class="form-control" id="lastName" required>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="registerEmail" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="registerEmail" required>
+          </div>
+          <div class="mb-3 password-input-container">
+            <label for="registerPassword" class="form-label">Password</label>
+            <input type="password" class="form-control" id="registerPassword" required minlength="6">
+            <span class="password-toggle" onclick="togglePassword('registerPassword')">
+              <i class="far fa-eye"></i>
+            </span>
+            <div class="form-text">Must be at least 6 characters</div>
+          </div>
+          <div class="mb-3 password-input-container">
+            <label for="confirmPassword" class="form-label">Confirm Password</label>
+            <input type="password" class="form-control" id="confirmPassword" required>
+            <span class="password-toggle" onclick="togglePassword('confirmPassword')">
+              <i class="far fa-eye"></i>
+            </span>
+          </div>
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="termsAgree" required>
+            <label class="form-check-label" for="termsAgree">
+                I agree to the
+                <a href="#" onclick="showTerms(event)">Terms &amp; Conditions</a>
+            </label>
+          </div>
+          <button type="submit" class="btn btn-dark w-100">Create Account</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-white text-dark py-4 mt-5 border-top border-secondary">
+    <div class="container text-center">
+      <p class="fw-bold mb-1">&copy; 2025 Lunara Skincare</p>
+      <p class="text-muted small mb-0">
+        Facebook: LunaraSkincare | Instagram: LunaraSkincare | TikTok: LunaraSkincare
+      </p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    // Cookie functions
+    function getCookie(cname) {
+      var name = cname + "=";
+      var decodedCookie = decodeURIComponent(document.cookie);
+      var ca = decodedCookie.split(';');
+      for(var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    }
+
+    function setCookie(cname, cvalue, exdays) {
+      var d = new Date();
+      d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+      var expires = "expires=" + d.toUTCString();
+      document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+
+    function deleteCookie(cname) {
+      document.cookie = cname + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    }
+
+    // Show/hide password
+    function togglePassword(inputId) {
+      const passwordInput = document.getElementById(inputId);
+      const eyeIcon = passwordInput.nextElementSibling.querySelector('i');
+      
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.classList.remove('fa-eye');
+        eyeIcon.classList.add('fa-eye-slash');
+      } else {
+        passwordInput.type = 'password';
+        eyeIcon.classList.remove('fa-eye-slash');
+        eyeIcon.classList.add('fa-eye');
+      }
+    }
+
+    // Show alert message
+    function showAlert(message, type) {
+      // Hide both alerts first
+      document.getElementById('errorAlert').style.display = 'none';
+      document.getElementById('successAlert').style.display = 'none';
+      
+      // Show the appropriate alert
+      const alertElement = document.getElementById(type === 'error' ? 'errorAlert' : 'successAlert');
+      alertElement.textContent = message;
+      alertElement.style.display = 'block';
+      
+      // Auto hide after 5 seconds
+      setTimeout(() => {
+        alertElement.style.display = 'none';
+      }, 5000);
+    }
+
+    // Form switching functionality
+    function showForm(formType) {
+      // Update active button
+      document.querySelectorAll('.form-switcher button').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      
+      // Show selected form
+      document.getElementById('login-form').classList.remove('active');
+      document.getElementById('register-form').classList.remove('active');
+      document.getElementById(formType + '-form').classList.add('active');
+      
+      // Clear any alerts when switching forms
+      document.getElementById('errorAlert').style.display = 'none';
+      document.getElementById('successAlert').style.display = 'none';
+    }
+    
+    // Redirect after login
+    function redirectAfterLogin() {
+      // Check if we need to redirect to payment after login
+      const redirectToPayment = getCookie("redirect_to_payment");
+      const redirectToCheckout = getCookie("redirect_to_checkout");
+      
+      if (redirectToPayment === "true") {
+        deleteCookie("redirect_to_payment");
+        window.location.href = "checkout.html";
+      } else if (redirectToCheckout === "true") {
+        deleteCookie("redirect_to_checkout");
+        window.location.href = "checkout.html";
+      } else {
+        window.location.href = "account.html"; // Redirect to account page after login
+      }
+    }
+    
+    // Check if email already exists
+    function emailExists(email) {
+      const userCookie = getCookie("lunara_user");
+      if (userCookie) {
+        const user = JSON.parse(userCookie);
+        return user.email === email;
+      }
+      return false;
+    }
+    
+    // Login form handling
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+      
+      // Simple validation
+      if (!email || !password) {
+        showAlert('Please fill in all fields', 'error');
+        return;
+      }
+      
+      // Check if user exists in cookies
+      const userCookie = getCookie("lunara_user");
+      
+      if (userCookie) {
+        const user = JSON.parse(userCookie);
+        if (user.email === email && user.password === password) {
+          // Set login status cookie (expires in 1 day)
+          setCookie("lunara_logged_in", "true", 1);
+          
+          // Set remember me if checked
+          if (document.getElementById('rememberMe').checked) {
+            setCookie("lunara_remember", "true", 30);
+          }
+          
+          showAlert('Login successful! Redirecting...', 'success');
+          setTimeout(redirectAfterLogin, 1500);
+        } else {
+          showAlert('Invalid email or password', 'error');
+        }
+      } else {
+        showAlert('No account found with this email. Please register first.', 'error');
+      }
+    });
+    
+    // Registration form handling
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const firstName = document.getElementById('firstName').value;
+      const lastName = document.getElementById('lastName').value;
+      const email = document.getElementById('registerEmail').value;
+      const password = document.getElementById('registerPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      
+      // Validation
+      if (!firstName || !lastName || !email || !password || !confirmPassword) {
+        showAlert('Please fill in all fields', 'error');
+        return;
+      }
+      
+      // Email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        showAlert('Please enter a valid email address', 'error');
+        return;
+      }
+      
+      // Check if email already exists
+      if (emailExists(email)) {
+        showAlert('An account with this email already exists. Please login.', 'error');
+        return;
+      }
+      
+      if (password !== confirmPassword) {
+        showAlert('Passwords do not match', 'error');
+        return;
+      }
+      
+      if (password.length < 6) {
+        showAlert('Password must be at least 6 characters', 'error');
+        return;
+      }
+      
+      if (!document.getElementById('termsAgree').checked) {
+        showAlert('Please agree to the terms and conditions', 'error');
+        return;
+      }
+      
+      // Create user object
+      const user = {
+        firstName,
+        lastName,
+        email,
+        password,
+        joinDate: new Date().toISOString().split('T')[0],
+        membership: "standard"
+      };
+      
+      // Save user to cookie (expires in 30 days)
+      setCookie("lunara_user", JSON.stringify(user), 30);
+      
+      // Set login status cookie (expires in 1 day)
+      setCookie("lunara_logged_in", "true", 1);
+      
+      showAlert('Account created successfully! You are now logged in.', 'success');
+      setTimeout(redirectAfterLogin, 1500);
+    });
+    
+    // Forgot password
+    function forgotPassword() {
+      const email = document.getElementById('loginEmail').value;
+      if (!email) {
+        showAlert('Please enter your email address first', 'error');
+        return;
+      }
+      
+      showAlert('Password reset instructions have been sent to your email.', 'success');
+    }
+
+    function showTerms(e) {
+      if (e) e.preventDefault();
+      alert(
+        `Terms & Conditions
+
+        1) You must provide accurate registration details.
+        2) Keep your password confidential; you're responsible for activity on your account.
+        3) Do not use the service for unlawful, harmful, or fraudulent purposes.
+        4) We may suspend or terminate accounts that violate these terms.
+        5) Your data will be handled according to our Privacy Policy.
+
+        By creating an account, you agree to these terms.`
+      );
+    }
+
+    // Check if user is already logged in
+    function checkLoginStatus() {
+      const loginStatus = getCookie("lunara_logged_in");
+      const redirectToCheckout = getCookie("redirect_to_checkout");
+      
+      if (loginStatus && redirectToCheckout === "true") {
+        // User is already logged in and wants to checkout, redirect to checkout
+        deleteCookie("redirect_to_checkout");
+        window.location.href = "checkout.html";
+      } else if (loginStatus) {
+        // User is already logged in, redirect to account page
+        window.location.href = "account.html";
+      }
+      
+      // Check if remember me is set
+      const rememberMe = getCookie("lunara_remember");
+      if (rememberMe === "true") {
+        document.getElementById('rememberMe').checked = true;
+        
+        // Pre-fill email if available
+        const userCookie = getCookie("lunara_user");
+        if (userCookie) {
+          const user = JSON.parse(userCookie);
+          document.getElementById('loginEmail').value = user.email;
+        }
+      }
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      checkLoginStatus();
+      
+      // Check if we're redirecting to checkout
+      const redirectToCheckout = getCookie("redirect_to_checkout");
+      if (redirectToCheckout === "true") {
+        showAlert('Please login to complete your purchase', 'success');
+      }
+    });
+  </script>
+</body>
+</html>

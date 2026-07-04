@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - Lunara Skincare</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f9fa;
+    }
+    .checkout-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .checkout-card {
+      background-color: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .order-summary-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    .form-label {
+      font-weight: 500;
+    }
+    .payment-method {
+      border: 2px solid #dee2e6;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: #fafafa;
+    }
+    .payment-method:hover {
+      border-color: #000;
+      background-color: #f8f9ff;
+    }
+    .payment-method.active {
+      border-color: #000;
+      background-color: #f8f9ff;
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+    }
+    .payment-details {
+      display: none;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #e9ecef;
+    }
+    .payment-details.show {
+      display: block;
+      animation: slideDown 0.3s ease;
+    }
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .payment-icon {
+      font-size: 24px;
+      margin-right: 12px;
+      width: 40px;
+      text-align: center;
+    }
+    .ewallet-options {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+    .ewallet-option {
+      flex: 1;
+      min-width: 120px;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .ewallet-option:hover {
+      border-color: #000;
+    }
+    .ewallet-option.selected {
+      border-color: #000;
+      background: #f8f9ff;
+    }
+    .bank-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .bank-option {
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .bank-option:hover {
+      border-color: #000;
+    }
+    .bank-option.selected {
+      border-color: #000;
+      background: #f8f9ff;
+    }
+    .secure-badge {
+      background-color: #d4edda;
+      color: #155724;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      display: inline-block;
+      margin-bottom: 15px;
+    }
+    .free-shipping-banner {
+      background-color: #d1ecf1;
+      color: #0c5460;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      text-align: center;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-4">
+    <a class="navbar-brand fw-bold text-dark" href="Homepage.html">Lunara Skincare</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link text-dark" href="Homepage.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="Aboutus.html">About Us</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="products.html">Products</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="Cart.html">Cart</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="contact.html">Contact</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="Login.html">Login</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <div class="container my-4">
+    <h1 class="text-center fw-bold">Checkout</h1>
+    <p class="text-center text-muted">Complete your purchase</p>
+  </div>
+
+  <!-- Checkout Content -->
+  <div class="container checkout-container my-4">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="checkout-card">
+          <h4 class="mb-4">Shipping Address</h4>
+          <form id="shipping-form">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="firstName" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="firstName" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="lastName" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="lastName" required>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Email Address</label>
+              <input type="email" class="form-control" id="email" required>
+            </div>
+            <div class="mb-3">
+              <label for="phone" class="form-label">Phone Number</label>
+              <input type="tel" class="form-control" id="phone" required>
+            </div>
+            <div class="mb-3">
+              <label for="address" class="form-label">Street Address</label>
+              <input type="text" class="form-control" id="address" required>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="city" class="form-label">City</label>
+                <input type="text" class="form-control" id="city" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="postcode" class="form-label">Postcode</label>
+                <input type="text" class="form-control" id="postcode" required>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="state" class="form-label">State</label>
+              <select class="form-select" id="state" required>
+                <option value="" selected disabled>Select State</option>
+                <option value="johor">Johor</option>
+                <option value="kedah">Kedah</option>
+                <option value="kelantan">Kelantan</option>
+                <option value="kl">Kuala Lumpur</option>
+                <option value="melaka">Melaka</option>
+                <option value="negeri-sembilan">Negeri Sembilan</option>
+                <option value="pahang">Pahang</option>
+                <option value="penang">Penang</option>
+                <option value="perak">Perak</option>
+                <option value="perlis">Perlis</option>
+                <option value="sabah">Sabah</option>
+                <option value="sarawak">Sarawak</option>
+                <option value="selangor">Selangor</option>
+                <option value="terengganu">Terengganu</option>
+              </select>
+            </div>
+          </form>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="checkout-card">
+          <h4 class="mb-4">
+            <i class="fas fa-credit-card me-2"></i>
+            Payment Method
+          </h4>
+          
+          <!-- Credit/Debit Card -->
+          <div class="payment-method active" data-payment="card" onclick="selectPayment('card')">
+            <div class="d-flex align-items-center">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="paymentMethod" id="cardPayment" checked>
+              </div>
+              <i class="fas fa-credit-card payment-icon text-primary"></i>
+              <label class="form-check-label fw-bold" for="cardPayment">
+                Credit/Debit Card
+              </label>
+            </div>
+            
+            <div class="payment-details show" id="cardDetails">
+              <div class="row">
+                <div class="col-md-12 mb-3">
+                  <label for="cardNumber" class="form-label">Card Number</label>
+                  <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="expiryDate" class="form-label">Expiry Date</label>
+                  <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY" maxlength="5" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="cvv" class="form-label">CVV</label>
+                  <input type="text" class="form-control" id="cvv" placeholder="123" maxlength="4" required>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12 mb-3">
+                  <label for="cardName" class="form-label">Name on Card</label>
+                  <input type="text" class="form-control" id="cardName" placeholder="John Doe" required>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- E-Wallet -->
+          <div class="payment-method" data-payment="ewallet" onclick="selectPayment('ewallet')">
+            <div class="d-flex align-items-center">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="paymentMethod" id="ewalletPayment">
+              </div>
+              <i class="fas fa-mobile-alt payment-icon text-success"></i>
+              <label class="form-check-label fw-bold" for="ewalletPayment">
+                E-Wallet
+              </label>
+            </div>
+            
+            <div class="payment-details" id="ewalletDetails">
+              <p class="text-muted mb-2">Choose your preferred e-wallet:</p>
+              <div class="ewallet-options">
+                <div class="ewallet-option" data-ewallet="tng" onclick="selectEwallet('tng')">
+                  <i class="fas fa-wallet text-info mb-2" style="font-size: 20px;"></i>
+                  <div class="fw-bold">Touch 'n Go</div>
+                  <small class="text-muted">eWallet</small>
+                </div>
+                <div class="ewallet-option" data-ewallet="boost" onclick="selectEwallet('boost')">
+                  <i class="fas fa-rocket text-warning mb-2" style="font-size: 20px;"></i>
+                  <div class="fw-bold">Boost</div>
+                  <small class="text-muted">Wallet</small>
+                </div>
+                <div class="ewallet-option" data-ewallet="grabpay" onclick="selectEwallet('grabpay')">
+                  <i class="fas fa-car text-success mb-2" style="font-size: 20px;"></i>
+                  <div class="fw-bold">GrabPay</div>
+                  <small class="text-muted">Wallet</small>
+                </div>
+              </div>
+              <div class="mt-3">
+                <label for="phoneNumber" class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" id="phoneNumber" placeholder="+60 12-345 6789" required>
+              </div>
+            </div>
+          </div>
+
+          <!-- Online Banking -->
+          <div class="payment-method" data-payment="banking" onclick="selectPayment('banking')">
+            <div class="d-flex align-items-center">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="paymentMethod" id="bankingPayment">
+              </div>
+              <i class="fas fa-university payment-icon text-warning"></i>
+              <label class="form-check-label fw-bold" for="bankingPayment">
+                Online Banking
+              </label>
+            </div>
+            
+            <div class="payment-details" id="bankingDetails">
+              <p class="text-muted mb-2">Choose your bank:</p>
+              <div class="bank-options">
+                <div class="bank-option" data-bank="maybank" onclick="selectBank('maybank')">
+                  <i class="fas fa-building text-primary mb-1"></i>
+                  <div class="fw-bold">Maybank</div>
+                </div>
+                <div class="bank-option" data-bank="cimb" onclick="selectBank('cimb')">
+                  <i class="fas fa-building text-danger mb-1"></i>
+                  <div class="fw-bold">CIMB Bank</div>
+                </div>
+                <div class="bank-option" data-bank="public" onclick="selectBank('public')">
+                  <i class="fas fa-building text-success mb-1"></i>
+                  <div class="fw-bold">Public Bank</div>
+                </div>
+                <div class="bank-option" data-bank="rhb" onclick="selectBank('rhb')">
+                  <i class="fas fa-building text-info mb-1"></i>
+                  <div class="fw-bold">RHB Bank</div>
+                </div>
+                <div class="bank-option" data-bank="hong-leong" onclick="selectBank('hong-leong')">
+                  <i class="fas fa-building text-secondary mb-1"></i>
+                  <div class="fw-bold">Hong Leong Bank</div>
+                </div>
+                <div class="bank-option" data-bank="ambank" onclick="selectBank('ambank')">
+                  <i class="fas fa-building text-dark mb-1"></i>
+                  <div class="fw-bold">AmBank</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Order Summary -->
+      <div class="col-md-4">
+        <div class="checkout-card">
+          <h4 class="mb-4">Order Summary</h4>
+          <div id="checkout-items">
+          </div>
+          <hr>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Subtotal:</span>
+            <span id="checkout-subtotal">RM 0.00</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Shipping:</span>
+            <span id="checkout-shipping">RM 10.00</span>
+          </div>
+          <div id="free-shipping-applied" class="free-shipping-banner" style="display: none;">
+            Free shipping applied!
+          </div>
+          <hr>
+          <div class="d-flex justify-content-between fw-bold mb-3">
+            <span>Total:</span>
+            <span id="checkout-total">RM 10.00</span>
+          </div>
+          
+          <button class="btn btn-dark w-100 py-3 fw-bold" onclick="placeOrder()">Place Order</button>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-white text-dark py-4 mt-5 border-top border-secondary">
+    <div class="container text-center">
+      <p class="fw-bold mb-1">&copy; 2025 Lunara Skincare</p>
+      <p class="text-muted small mb-0">
+        Facebook: LunaraSkincare | Instagram: LunaraSkincare | TikTok: LunaraSkincare
+      </p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    let selectedPayment = 'card';
+    let selectedEwallet = null;
+    let selectedBank = null;
+
+    // Cookie functions
+    function getCookie(cname) {
+      var name = cname + "=";
+      var decodedCookie = decodeURIComponent(document.cookie);
+      var ca = decodedCookie.split(';');
+      for(var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    }
+
+    function setCookie(cname, cvalue, exdays) {
+      var d = new Date();
+      d.setTime(d.getTime() + (exdays*24*60*60*1000));
+      var expires = "expires="+ d.toUTCString();
+      document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+
+    // Check login status
+    function checkLoginStatus() {
+      const loginStatus = getCookie("lunara_logged_in");
+      if (!loginStatus) {
+        setCookie("redirect_to_payment", "true", 1);
+        window.location.href = "Login.html";
+        return false;
+      }
+      return true;
+    }
+
+    // Get cart items
+    function getCart() {
+      const cartCookie = getCookie("lunara_cart");
+      return cartCookie ? JSON.parse(cartCookie) : [];
+    }
+
+    // Update order summary
+    function updateOrderSummary() {
+      const cart = getCart();
+      const itemsContainer = document.getElementById('checkout-items');
+      let subtotal = 0;
+      
+      if (cart.length === 0) {
+        itemsContainer.innerHTML = '<p class="text-muted">Your cart is empty</p>';
+        document.getElementById('checkout-subtotal').textContent = 'RM 0.00';
+        document.getElementById('checkout-shipping').textContent = 'RM 10.00';
+        document.getElementById('checkout-total').textContent = 'RM 10.00';
+        return;
+      }
+      
+      let itemsHTML = '';
+      cart.forEach(item => {
+        const itemTotal = parseFloat(item.price) * item.quantity;
+        subtotal += itemTotal;
+        
+        itemsHTML += `
+          <div class="order-summary-item">
+            <div>
+              <strong>${item.name}</strong>
+              <div class="text-muted small">Qty: ${item.quantity}</div>
+            </div>
+            <div>RM ${itemTotal.toFixed(2)}</div>
+          </div>
+        `;
+      });
+      
+      itemsContainer.innerHTML = itemsHTML;
+      
+      const shippingCost = subtotal >= 80 ? 0 : 10;
+      const total = subtotal + shippingCost;
+      
+      document.getElementById('checkout-subtotal').textContent = `RM ${subtotal.toFixed(2)}`;
+      document.getElementById('checkout-shipping').textContent = shippingCost === 0 ? 'FREE' : `RM ${shippingCost.toFixed(2)}`;
+      document.getElementById('checkout-total').textContent = `RM ${total.toFixed(2)}`;
+      
+      if (shippingCost === 0) {
+        document.getElementById('free-shipping-applied').style.display = 'block';
+      } else {
+        document.getElementById('free-shipping-applied').style.display = 'none';
+      }
+    }
+
+    // Select payment method
+    function selectPayment(paymentType) {
+      selectedPayment = paymentType;
+      
+      document.querySelectorAll('.payment-method').forEach(method => {
+        method.classList.remove('active');
+      });
+      
+      document.querySelectorAll('.payment-details').forEach(details => {
+        details.classList.remove('show');
+      });
+      
+      const selectedMethod = document.querySelector(`[data-payment="${paymentType}"]`);
+      selectedMethod.classList.add('active');
+      
+      const detailsId = paymentType + 'Details';
+      const details = document.getElementById(detailsId);
+      if (details) {
+        details.classList.add('show');
+      }
+      
+      const radioButton = selectedMethod.querySelector('input[type="radio"]');
+      radioButton.checked = true;
+    }
+
+    function selectEwallet(ewalletType) {
+      selectedEwallet = ewalletType;
+      
+      document.querySelectorAll('.ewallet-option').forEach(option => {
+        option.classList.remove('selected');
+      });
+      
+      document.querySelector(`[data-ewallet="${ewalletType}"]`).classList.add('selected');
+    }
+
+    function selectBank(bankType) {
+      selectedBank = bankType;
+      
+      document.querySelectorAll('.bank-option').forEach(option => {
+        option.classList.remove('selected');
+      });
+      
+      document.querySelector(`[data-bank="${bankType}"]`).classList.add('selected');
+    }
+
+    // Place order
+    function placeOrder() {
+      const shippingForm = document.getElementById('shipping-form');
+      if (!shippingForm.checkValidity()) {
+        shippingForm.reportValidity();
+        return;
+      }
+      
+      if (selectedPayment === 'card') {
+        const cardNumber = document.getElementById('cardNumber').value;
+        const expiryDate = document.getElementById('expiryDate').value;
+        const cvv = document.getElementById('cvv').value;
+        const cardName = document.getElementById('cardName').value;
+        
+        if (!cardNumber || !expiryDate || !cvv || !cardName) {
+          alert('Please complete all credit card details');
+          return;
+        }
+      } else if (selectedPayment === 'ewallet') {
+        if (!selectedEwallet) {
+          alert('Please select an e-wallet option.');
+          return;
+        }
+        
+        const phoneNumber = document.getElementById('phoneNumber').value;
+        if (!phoneNumber) {
+          alert('Please enter your phone number.');
+          return;
+        }
+      } else if (selectedPayment === 'banking') {
+        if (!selectedBank) {
+          alert('Please select a bank.');
+          return;
+        }
+      }
+      
+      // Get cart
+      const cart = getCart();
+      if (cart.length === 0) {
+        alert('Your cart is empty. Add some products before checkout.');
+        return;
+      }
+      
+      alert('Thank you for your order! Your payment has been processed successfully.');
+      
+      document.cookie = "lunara_cart=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      
+      window.location.href = "Homepage.html";
+    }
+
+    // Format card number input
+    document.addEventListener('DOMContentLoaded', function() {
+      if (checkLoginStatus()) {
+        updateOrderSummary();
+      }
+
+      // Card number formatting
+      const cardNumberInput = document.getElementById('cardNumber');
+      if (cardNumberInput) {
+        cardNumberInput.addEventListener('input', function(e) {
+          let value = e.target.value.replace(/\s/g, '').replace(/[^0-9]/gi, '');
+          let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+          e.target.value = formattedValue;
+        });
+      }
+
+      // Format expiry date input
+      const expiryDateInput = document.getElementById('expiryDate');
+      if (expiryDateInput) {
+        expiryDateInput.addEventListener('input', function(e) {
+          let value = e.target.value.replace(/\D/g, '');
+          if (value.length >= 2) {
+            value = value.substring(0,2) + '/' + value.substring(2,4);
+          }
+          e.target.value = value;
+        });
+      }
+
+      // Format CVV input
+      const cvvInput = document.getElementById('cvv');
+      if (cvvInput) {
+        cvvInput.addEventListener('input', function(e) {
+          e.target.value = e.target.value.replace(/\D/g, '');
+        });
+      }
+    });
+  </script>
+</body>
+</html>
