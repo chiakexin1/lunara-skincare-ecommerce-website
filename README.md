@@ -6,17 +6,8 @@ An authentic, curated, and user-centered skincare e-commerce front-end applicati
 
 ## 🚀 Live Demo
 Experience the fully responsive live website here:  
-👉 [Lunara Skincare Live App](https://lunara-skincare-gpb2euafbtekg6az.southeastasia-01.azurewebsites.net/Homepage.html)
+👉 [Lunara Skincare Website](https://chiakexin1.github.io/lunara-skincare-ecommerce-website/Homepage.html)
 
----
-
-## 📖 Table of Contents
-* [Project Overview](#project-overview)
-* [Key Features](#key-features)
-* [Technical Implementations](#technical-implementations)
-* [Sitemap & Structure](#sitemap--structure)
-* [Literature Review Summary](#literature-review-summary)
-* [The Team](#the-team)
 
 ---
 
